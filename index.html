@@ -355,6 +355,22 @@
             padding-bottom: 5px;
             margin-bottom: 15px;
         }
+
+#pdf-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+    height: 200px; /* Hauteur fixe pour toutes les images */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#pdf-stl-preview {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain; /* Maintient les proportions sans déformer l'image */
+}
     </style>
 </head>
 <body>
@@ -561,10 +577,9 @@
         <div class="pdf-section">
             <h3>Projet d'impression 3D: <span id="pdf-project-name"></span></h3>
             
-            <div style="margin-top: 20px;">
-                <div id="pdf-image-container" style="text-align: center; margin-bottom: 20px;">
-                    <img id="pdf-stl-preview" style="max-width: 100%; max-height: 300px;" />
-                </div>
+            <div id="pdf-image-container">
+    <img id="pdf-stl-preview" />
+</div>
                 
                 <h4>Détails techniques</h4>
                 <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
@@ -767,24 +782,26 @@ setTimeout(() => {
     // Rendre le template visible temporairement pour la capture
     pdfTemplate.style.display = 'block';
     
-    html2canvas(pdfTemplate, {
-        scale: 2, // Meilleure qualité
-        useCORS: true,
-        logging: false
-    }).then(canvas => {
-        // Cacher à nouveau le template
-        pdfTemplate.style.display = 'none';
-        
-        // Ajouter l'image du canvas au PDF
-        const imgData = canvas.toDataURL('image/png');
-        const imgWidth = 210; // A4 width in mm
-        const pageHeight = 297; // A4 height in mm
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 0;
-        
-        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+     // Remplacez par ce code qui ajoute des marges:
+html2canvas(pdfTemplate, {
+    scale: 2, // Meilleure qualité
+    useCORS: true,
+    logging: false
+}).then(canvas => {
+    // Cacher à nouveau le template
+    pdfTemplate.style.display = 'none';
+    
+    // Ajouter l'image du canvas au PDF avec des marges
+    const imgData = canvas.toDataURL('image/png');
+    const margin = 15; // Marge de 15mm de chaque côté
+    const imgWidth = 210 - (margin * 2); // A4 width minus margins
+    const pageHeight = 297 - (margin * 2); // A4 height minus margins
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+    
+    doc.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
         
         // En cas de plusieurs pages
         while (heightLeft >= 0) {
