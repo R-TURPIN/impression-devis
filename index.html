@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Prix d'Impression 3D</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f2f2f2;
+            border-radius: 4px;
+        }
+        .preview {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        .printer-data {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .printer-card {
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .image-upload {
+            margin: 15px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        #pdf-preview {
+            width: 100%;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .pdf-section {
+            margin-bottom: 20px;
+        }
+        #stl-preview-img {
+            max-width: 100%;
+            max-height: 300px;
+            display: block;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur de Prix d'Impression 3D</h1>
+        
+        <div class="printer-data">
+            <div class="printer-card">
+                <h3>Creality K1C</h3>
+                <p>Prix d'achat: 600€</p>
+                <p>Consommation: 350W</p>
+                <p>Pièces maintenance: 100€/an</p>
+                <p>Coût horaire calculé: 0.29€/h</p>
+            </div>
+            <div class="printer-card">
+                <h3>Elegoo Neptune 4 Max</h3>
+                <p>Prix d'achat: 450€</p>
+                <p>Consommation: 450W</p>
+                <p>Pièces maintenance: 150€/an</p>
+                <p>Coût horaire calculé: 0.31€/h</p>
+            </div>
+            <div class="printer-card">
+                <h3>Bambu Lab A1</h3>
+                <p>Prix d'achat: 435€</p>
+                <p>Consommation: 95W</p>
+                <p>Pièces maintenance: 150€/an</p>
+                <p>Coût horaire calculé: 0.17€/h</p>
+            </div>
+        </div>
+        
+        <form id="pricing-form">
+            <h2>Informations du projet</h2>
+            
+            <div class="form-group">
+                <label for="printer">Imprimante utilisée:</label>
+                <select id="printer" required>
+                    <option value="">-- Sélectionner une imprimante --</option>
+                    <option value="Creality K1C">Creality K1C</option>
+                    <option value="Elegoo Neptune 4 Max">Elegoo Neptune 4 Max</option>
+                    <option value="Bambu Lab A1">Bambu Lab A1</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="print-time">Temps d'impression (heures):</label>
+                <input type="number" id="print-time" step="0.01" min="0" required placeholder="Ex: 5.5">
+            </div>
+            
+            <div class="form-group">
+                <label for="filament-weight">Quantité de filament utilisée (grammes):</label>
+                <input type="number" id="filament-weight" step="0.01" min="0" required placeholder="Ex: 250">
+            </div>
+            
+            <div class="form-group">
+                <label for="filament-price">Prix du filament au kg (€):</label>
+                <input type="number" id="filament-price" step="0.01" min="0" value="15" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="labor-time">Temps de main d'œuvre (heures):</label>
+                <input type="number" id="labor-time" step="0.01" min="0" required placeholder="Ex: 0.5">
+            </div>
+            
+            <div class="form-group">
+                <label for="labor-rate">Tarif horaire main d'œuvre (€/h):</label>
+                <input type="number" id="labor-rate" step="0.01" min="0" value="10" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="project-name">Nom du projet:</label>
+                <input type="text" id="project-name" placeholder="Ex: Support téléphone">
+            </div>
+            
+            <div class="form-group">
+                <label for="client-name">Nom du client:</label>
+                <input type="text" id="client-name" placeholder="Ex: Jean Dupont">
+            </div>
+            
+            <div class="form-group">
+                <label for="project-notes">Notes additionnelles:</label>
+                <textarea id="project-notes" rows="3" placeholder="Détails supplémentaires du projet..."></textarea>
+            </div>
+            
+            <div class="image-upload">
+                <label for="stl-image">Image du modèle STL:</label>
+                <input type="file" id="stl-image" accept="image/*">
+            </div>
+            
+            <button type="button" id="calculate-btn">Calculer le prix</button>
+            <button type="button" id="generate-pdf-btn" class="hidden">Générer le PDF</button>
+        </form>
+        
+        <div id="results" class="results hidden">
+            <h2>Résultats du calcul</h2>
+            <table>
+                <tr>
+                    <th>Description</th>
+                    <th>Valeur</th>
+                </tr>
+                <tr>
+                    <td>Coût d'impression (machine)</td>
+                    <td id="print-cost">--</td>
+                </tr>
+                <tr>
+                    <td>Coût du filament</td>
+                    <td id="filament-cost">--</td>
+                </tr>
+                <tr>
+                    <td>Coût de main d'œuvre</td>
+                    <td id="labor-cost">--</td>
+                </tr>
+                <tr>
+                    <td><strong>Prix total TTC</strong></td>
+                    <td id="total-cost"><strong>--</strong></td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id="pdf-preview" class="hidden">
+            <h2>Aperçu du devis</h2>
+            <div id="pdf-content">
+                <div class="pdf-section">
+                    <h3>Devis d'impression 3D</h3>
+                    <p><strong>Projet:</strong> <span id="pdf-project-name">--</span></p>
+                    <p><strong>Client:</strong> <span id="pdf-client-name">--</span></p>
+                    <p><strong>Date:</strong> <span id="pdf-date">--</span></p>
+                </div>
+                
+                <div class="pdf-section">
+                    <h3>Détails techniques</h3>
+                    <p><strong>Imprimante utilisée:</strong> <span id="pdf-printer">--</span></p>
+                    <p><strong>Temps d'impression:</strong> <span id="pdf-print-time">--</span> heures</p>
+                    <p><strong>Quantité de filament:</strong> <span id="pdf-filament-weight">--</span> grammes</p>
+                    <p><strong>Temps de main d'œuvre:</strong> <span id="pdf-labor-time">--</span> heures</p>
+                </div>
+                
+                <div class="pdf-section">
+                    <h3>Aperçu du modèle</h3>
+                    <img id="stl-preview-img" src="/api/placeholder/400/300" alt="Aperçu du modèle 3D">
+                </div>
+                
+                <div class="pdf-section">
+                    <h3>Tarification</h3>
+                    <table>
+                        <tr>
+                            <th>Description</th>
+                            <th>Montant</th>
+                        </tr>
+                        <tr>
+                            <td>Coût d'impression (machine)</td>
+                            <td id="pdf-print-cost">--</td>
+                        </tr>
+                        <tr>
+                            <td>Coût du filament</td>
+                            <td id="pdf-filament-cost">--</td>
+                        </tr>
+                        <tr>
+                            <td>Coût de main d'œuvre</td>
+                            <td id="pdf-labor-cost">--</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prix total TTC</strong></td>
+                            <td id="pdf-total-cost"><strong>--</strong></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="pdf-section">
+                    <h3>Notes</h3>
+                    <p id="pdf-notes">--</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Coût horaire des imprimantes (€/h)
+            const printerRates = {
+                'Creality K1C': 0.29,
+                'Elegoo Neptune 4 Max': 0.31,
+                'Bambu Lab A1': 0.17
+            };
+            
+            // Éléments du DOM
+            const calculateBtn = document.getElementById('calculate-btn');
+            const generatePdfBtn = document.getElementById('generate-pdf-btn');
+            const resultsDiv = document.getElementById('results');
+            const pdfPreviewDiv = document.getElementById('pdf-preview');
+            
+            // Affichage de l'image téléchargée
+            const stlImageInput = document.getElementById('stl-image');
+            const stlPreviewImg = document.getElementById('stl-preview-img');
+            
+            stlImageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        stlPreviewImg.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Fonction de calcul du prix
+            calculateBtn.addEventListener('click', function() {
+                // Récupération des valeurs
+                const printer = document.getElementById('printer').value;
+                const printTime = parseFloat(document.getElementById('print-time').value);
+                const filamentWeight = parseFloat(document.getElementById('filament-weight').value);
+                const filamentPrice = parseFloat(document.getElementById('filament-price').value);
+                const laborTime = parseFloat(document.getElementById('labor-time').value);
+                const laborRate = parseFloat(document.getElementById('labor-rate').value);
+                
+                // Validation des entrées
+                if (!printer || isNaN(printTime) || isNaN(filamentWeight) || 
+                    isNaN(filamentPrice) || isNaN(laborTime) || isNaN(laborRate)) {
+                    alert('Veuillez remplir tous les champs requis avec des valeurs valides.');
+                    return;
+                }
+                
+                // Calculs
+                const printerCost = printTime * printerRates[printer];
+                const filamentCost = (filamentWeight / 1000) * filamentPrice;
+                const laborCost = laborTime * laborRate;
+                const totalCost = printerCost + filamentCost + laborCost;
+                
+                // Affichage des résultats
+                document.getElementById('print-cost').textContent = printerCost.toFixed(2) + ' €';
+                document.getElementById('filament-cost').textContent = filamentCost.toFixed(2) + ' €';
+                document.getElementById('labor-cost').textContent = laborCost.toFixed(2) + ' €';
+                document.getElementById('total-cost').textContent = totalCost.toFixed(2) + ' €';
+                
+                // Remplir l'aperçu PDF
+                document.getElementById('pdf-project-name').textContent = document.getElementById('project-name').value || 'Non spécifié';
+                document.getElementById('pdf-client-name').textContent = document.getElementById('client-name').value || 'Non spécifié';
+                document.getElementById('pdf-date').textContent = new Date().toLocaleDateString();
+                document.getElementById('pdf-printer').textContent = printer;
+                document.getElementById('pdf-print-time').textContent = printTime;
+                document.getElementById('pdf-filament-weight').textContent = filamentWeight;
+                document.getElementById('pdf-labor-time').textContent = laborTime;
+                document.getElementById('pdf-print-cost').textContent = printerCost.toFixed(2) + ' €';
+                document.getElementById('pdf-filament-cost').textContent = filamentCost.toFixed(2) + ' €';
+                document.getElementById('pdf-labor-cost').textContent = laborCost.toFixed(2) + ' €';
+                document.getElementById('pdf-total-cost').textContent = totalCost.toFixed(2) + ' €';
+                document.getElementById('pdf-notes').textContent = document.getElementById('project-notes').value || 'Aucune note additionnelle';
+                
+                // Afficher les résultats et bouton PDF
+                resultsDiv.classList.remove('hidden');
+                generatePdfBtn.classList.remove('hidden');
+                pdfPreviewDiv.classList.add('hidden');
+            });
+            
+            // Aperçu du PDF
+            generatePdfBtn.addEventListener('click', function() {
+                pdfPreviewDiv.classList.remove('hidden');
+                
+                // Dans un vrai système, ici on génèrerait un PDF à télécharger
+                alert("Dans un véritable système, cette action générerait un PDF à télécharger. Cet aperçu montre comment le PDF serait structuré.");
+            });
+        });
+    </script>
+</body>
+</html>
