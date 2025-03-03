@@ -3,286 +3,634 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculateur de Prix d'Impression 3D</title>
+    <title>Calculateur de Prix d'Impression 3D - PRO</title>
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f8fafc;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --success-color: #10b981;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 0;
+            background-color: #f1f5f9;
+            color: var(--text-color);
+            line-height: 1.6;
         }
+        
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px 20px;
         }
-        h1, h2 {
-            color: #2c3e50;
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
         }
+        
+        .header h1 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 32px;
+        }
+        
+        .header p {
+            color: #64748b;
+            margin-top: 0;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #334155;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
+        
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #475569;
         }
+        
         select, input, textarea {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            color: var(--text-color);
         }
+        
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
         button {
-            background-color: #3498db;
+            flex: 1;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            padding: 12px 20px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+        
         button:hover {
-            background-color: #2980b9;
+            background-color: var(--primary-hover);
         }
+        
+        button.secondary {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+        
+        button.secondary:hover {
+            background-color: #e2e8f0;
+        }
+        
+        button.success {
+            background-color: var(--success-color);
+        }
+        
+        button.success:hover {
+            background-color: #0ea271;
+        }
+        
+        .printer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .printer-card {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .printer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .printer-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 18px;
+        }
+        
+        .printer-data {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .printer-stat {
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+        
+        .printer-stat span {
+            color: #334155;
+            font-weight: 500;
+        }
+        
+        .file-input-container {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #f8fafc;
+            transition: border-color 0.2s;
+        }
+        
+        .file-input-container:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .file-input-container p {
+            text-align: center;
+            color: #64748b;
+        }
+        
+        #stl-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-preview {
+            display: none;
+            position: relative;
+            margin-top: 15px;
+        }
+        
+        .file-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        .remove-image {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .remove-image:hover {
+            color: #ef4444;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            font-size: 15px;
         }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
+        
         th {
-            background-color: #f2f2f2;
-        }
-        .results {
-            margin-top: 30px;
+            background-color: #f8fafc;
             padding: 15px;
-            background-color: #f2f2f2;
-            border-radius: 4px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid var(--border-color);
         }
-        .preview {
-            margin-top: 20px;
+        
+        td {
             padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: white;
+            border-bottom: 1px solid var(--border-color);
         }
-        .printer-data {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+        
+        tr:last-child td {
+            border-bottom: none;
         }
-        .printer-card {
-            flex: 1;
-            min-width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 15px;
-            margin-bottom: 15px;
+        
+        .price-row td {
+            background-color: #f0f9ff;
+            font-weight: 600;
+            color: var(--primary-color);
         }
-        .image-upload {
-            margin: 15px 0;
-        }
+        
         .hidden {
             display: none;
         }
-        #pdf-preview {
-            width: 100%;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
         }
-        .pdf-section {
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert.success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #d1fae5;
+        }
+        
+        #pdf-template {
+            display: none;
+        }
+        
+        .company-info {
             margin-bottom: 20px;
         }
-        #stl-preview-img {
-            max-width: 100%;
-            max-height: 300px;
-            display: block;
-            margin: 15px 0;
+        
+        .company-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .company-info input {
+            margin-bottom: 10px;
+        }
+        
+        /* Devis PDF Style */
+        .pdf-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .pdf-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .pdf-devis-info {
+            text-align: right;
+        }
+        
+        .pdf-section {
+            margin-bottom: 30px;
+        }
+        
+        .pdf-section h3 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Calculateur de Prix d'Impression 3D</h1>
+        <div class="header">
+            <h1>Calculateur de Prix d'Impression 3D</h1>
+            <p>Générez facilement des devis professionnels pour vos clients</p>
+        </div>
         
-        <div class="printer-data">
-            <div class="printer-card">
-                <h3>Creality K1C</h3>
-                <p>Prix d'achat: 600€</p>
-                <p>Consommation: 350W</p>
-                <p>Pièces maintenance: 100€/an</p>
-                <p>Coût horaire calculé: 0.29€/h</p>
-            </div>
-            <div class="printer-card">
-                <h3>Elegoo Neptune 4 Max</h3>
-                <p>Prix d'achat: 450€</p>
-                <p>Consommation: 450W</p>
-                <p>Pièces maintenance: 150€/an</p>
-                <p>Coût horaire calculé: 0.31€/h</p>
-            </div>
-            <div class="printer-card">
-                <h3>Bambu Lab A1</h3>
-                <p>Prix d'achat: 435€</p>
-                <p>Consommation: 95W</p>
-                <p>Pièces maintenance: 150€/an</p>
-                <p>Coût horaire calculé: 0.17€/h</p>
+        <div class="card">
+            <h2>Imprimantes disponibles</h2>
+            <div class="printer-grid">
+                <div class="printer-card">
+                    <h3>Creality K1C</h3>
+                    <div class="printer-stat">Prix d'achat: <span>600€</span></div>
+                    <div class="printer-stat">Consommation: <span>350W</span></div>
+                    <div class="printer-stat">Maintenance: <span>100€/an</span></div>
+                    <div class="printer-stat">Coût horaire: <span>0.29€/h</span></div>
+                </div>
+                <div class="printer-card">
+                    <h3>Elegoo Neptune 4 Max</h3>
+                    <div class="printer-stat">Prix d'achat: <span>450€</span></div>
+                    <div class="printer-stat">Consommation: <span>450W</span></div>
+                    <div class="printer-stat">Maintenance: <span>150€/an</span></div>
+                    <div class="printer-stat">Coût horaire: <span>0.31€/h</span></div>
+                </div>
+                <div class="printer-card">
+                    <h3>Bambu Lab A1</h3>
+                    <div class="printer-stat">Prix d'achat: <span>435€</span></div>
+                    <div class="printer-stat">Consommation: <span>95W</span></div>
+                    <div class="printer-stat">Maintenance: <span>150€/an</span></div>
+                    <div class="printer-stat">Coût horaire: <span>0.17€/h</span></div>
+                </div>
             </div>
         </div>
         
-        <form id="pricing-form">
+        <div class="card">
             <h2>Informations du projet</h2>
             
-            <div class="form-group">
-                <label for="printer">Imprimante utilisée:</label>
-                <select id="printer" required>
-                    <option value="">-- Sélectionner une imprimante --</option>
-                    <option value="Creality K1C">Creality K1C</option>
-                    <option value="Elegoo Neptune 4 Max">Elegoo Neptune 4 Max</option>
-                    <option value="Bambu Lab A1">Bambu Lab A1</option>
-                </select>
+            <div class="company-info">
+                <h3>Informations de l'entreprise</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="company-name">Nom de l'entreprise</label>
+                        <input type="text" id="company-name" placeholder="Votre entreprise">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-email">Email</label>
+                        <input type="email" id="company-email" placeholder="contact@votre-entreprise.fr">
+                    </div>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="print-time">Temps d'impression (heures):</label>
-                <input type="number" id="print-time" step="0.01" min="0" required placeholder="Ex: 5.5">
-            </div>
-            
-            <div class="form-group">
-                <label for="filament-weight">Quantité de filament utilisée (grammes):</label>
-                <input type="number" id="filament-weight" step="0.01" min="0" required placeholder="Ex: 250">
-            </div>
-            
-            <div class="form-group">
-                <label for="filament-price">Prix du filament au kg (€):</label>
-                <input type="number" id="filament-price" step="0.01" min="0" value="15" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="labor-time">Temps de main d'œuvre (heures):</label>
-                <input type="number" id="labor-time" step="0.01" min="0" required placeholder="Ex: 0.5">
-            </div>
-            
-            <div class="form-group">
-                <label for="labor-rate">Tarif horaire main d'œuvre (€/h):</label>
-                <input type="number" id="labor-rate" step="0.01" min="0" value="10" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="project-name">Nom du projet:</label>
-                <input type="text" id="project-name" placeholder="Ex: Support téléphone">
-            </div>
-            
-            <div class="form-group">
-                <label for="client-name">Nom du client:</label>
-                <input type="text" id="client-name" placeholder="Ex: Jean Dupont">
-            </div>
-            
-            <div class="form-group">
-                <label for="project-notes">Notes additionnelles:</label>
-                <textarea id="project-notes" rows="3" placeholder="Détails supplémentaires du projet..."></textarea>
-            </div>
-            
-            <div class="image-upload">
-                <label for="stl-image">Image du modèle STL:</label>
-                <input type="file" id="stl-image" accept="image/*">
-            </div>
-            
-            <button type="button" id="calculate-btn">Calculer le prix</button>
-            <button type="button" id="generate-pdf-btn" class="hidden">Générer le PDF</button>
-        </form>
-        
-        <div id="results" class="results hidden">
-            <h2>Résultats du calcul</h2>
-            <table>
-                <tr>
-                    <th>Description</th>
-                    <th>Valeur</th>
-                </tr>
-                <tr>
-                    <td>Coût d'impression (machine)</td>
-                    <td id="print-cost">--</td>
-                </tr>
-                <tr>
-                    <td>Coût du filament</td>
-                    <td id="filament-cost">--</td>
-                </tr>
-                <tr>
-                    <td>Coût de main d'œuvre</td>
-                    <td id="labor-cost">--</td>
-                </tr>
-                <tr>
-                    <td><strong>Prix total TTC</strong></td>
-                    <td id="total-cost"><strong>--</strong></td>
-                </tr>
-            </table>
+            <form id="pricing-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="printer">Imprimante utilisée*</label>
+                        <select id="printer" required>
+                            <option value="">-- Sélectionner une imprimante --</option>
+                            <option value="Creality K1C">Creality K1C</option>
+                            <option value="Elegoo Neptune 4 Max">Elegoo Neptune 4 Max</option>
+                            <option value="Bambu Lab A1">Bambu Lab A1</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="print-time">Temps d'impression (heures)*</label>
+                        <input type="number" id="print-time" step="0.01" min="0" required placeholder="Ex: 5.5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="filament-weight">Filament utilisé (grammes)*</label>
+                        <input type="number" id="filament-weight" step="0.01" min="0" required placeholder="Ex: 250">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="filament-price">Prix du filament (€/kg)*</label>
+                        <input type="number" id="filament-price" step="0.01" min="0" value="15" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="labor-time">Main d'œuvre (heures)*</label>
+                        <input type="number" id="labor-time" step="0.01" min="0" required placeholder="Ex: 0.5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="labor-rate">Tarif horaire main d'œuvre (€/h)*</label>
+                        <input type="number" id="labor-rate" step="0.01" min="0" value="10" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="project-name">Nom du projet*</label>
+                    <input type="text" id="project-name" required placeholder="Ex: Support téléphone">
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="client-name">Nom du client</label>
+                        <input type="text" id="client-name" placeholder="Ex: Jean Dupont">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="client-email">Email du client</label>
+                        <input type="email" id="client-email" placeholder="Ex: client@example.com">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="project-notes">Notes additionnelles</label>
+                    <textarea id="project-notes" rows="3" placeholder="Détails supplémentaires du projet..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Image du modèle STL</label>
+                    <div class="file-input-container">
+                        <p>Cliquez ou déposez une image du modèle</p>
+                        <input type="file" id="stl-image" accept="image/*">
+                    </div>
+                    <div class="file-preview" id="file-preview">
+                        <img id="stl-preview-img" src="" alt="Aperçu du modèle 3D">
+                        <div class="remove-image" id="remove-image">×</div>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" id="calculate-btn">Calculer le prix</button>
+                </div>
+            </form>
         </div>
         
-        <div id="pdf-preview" class="hidden">
-            <h2>Aperçu du devis</h2>
-            <div id="pdf-content">
-                <div class="pdf-section">
-                    <h3>Devis d'impression 3D</h3>
-                    <p><strong>Projet:</strong> <span id="pdf-project-name">--</span></p>
-                    <p><strong>Client:</strong> <span id="pdf-client-name">--</span></p>
-                    <p><strong>Date:</strong> <span id="pdf-date">--</span></p>
-                </div>
-                
-                <div class="pdf-section">
-                    <h3>Détails techniques</h3>
-                    <p><strong>Imprimante utilisée:</strong> <span id="pdf-printer">--</span></p>
-                    <p><strong>Temps d'impression:</strong> <span id="pdf-print-time">--</span> heures</p>
-                    <p><strong>Quantité de filament:</strong> <span id="pdf-filament-weight">--</span> grammes</p>
-                    <p><strong>Temps de main d'œuvre:</strong> <span id="pdf-labor-time">--</span> heures</p>
-                </div>
-                
-                <div class="pdf-section">
-                    <h3>Aperçu du modèle</h3>
-                    <img id="stl-preview-img" src="/api/placeholder/400/300" alt="Aperçu du modèle 3D">
-                </div>
-                
-                <div class="pdf-section">
-                    <h3>Tarification</h3>
-                    <table>
-                        <tr>
-                            <th>Description</th>
-                            <th>Montant</th>
-                        </tr>
-                        <tr>
-                            <td>Coût d'impression (machine)</td>
-                            <td id="pdf-print-cost">--</td>
-                        </tr>
-                        <tr>
-                            <td>Coût du filament</td>
-                            <td id="pdf-filament-cost">--</td>
-                        </tr>
-                        <tr>
-                            <td>Coût de main d'œuvre</td>
-                            <td id="pdf-labor-cost">--</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Prix total TTC</strong></td>
-                            <td id="pdf-total-cost"><strong>--</strong></td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="pdf-section">
-                    <h3>Notes</h3>
-                    <p id="pdf-notes">--</p>
-                </div>
+        <div id="results" class="card hidden">
+            <h2>Résultats du calcul</h2>
+            <div id="success-alert" class="alert success hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Calcul effectué avec succès !
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 70%">Description</th>
+                        <th>Montant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Coût d'impression (machine)</td>
+                        <td id="print-cost">--</td>
+                    </tr>
+                    <tr>
+                        <td>Coût du filament</td>
+                        <td id="filament-cost">--</td>
+                    </tr>
+                    <tr>
+                        <td>Coût de main d'œuvre</td>
+                        <td id="labor-cost">--</td>
+                    </tr>
+                    <tr class="price-row">
+                        <td>Prix total TTC</td>
+                        <td id="total-cost">--</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="button-group">
+                <button type="button" id="generate-pdf-btn" class="success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Télécharger le devis PDF
+                </button>
+                <button type="button" id="new-calculation-btn" class="secondary">
+                    Nouveau calcul
+                </button>
             </div>
         </div>
     </div>
+    
+    <!-- Template pour le PDF -->
+    <div id="pdf-template" class="pdf-template">
+        <div class="pdf-header">
+            <div class="pdf-logo" id="pdf-company-name">Votre Entreprise</div>
+            <div class="pdf-devis-info">
+                <h2>DEVIS</h2>
+                <p>Date: <span id="pdf-date"></span></p>
+                <p>Réf: <span id="pdf-ref"></span></p>
+            </div>
+        </div>
+        
+        <div class="pdf-section">
+            <div style="display: flex; justify-content: space-between;">
+                <div>
+                    <h3>Prestataire</h3>
+                    <p id="pdf-company-full-name">Votre Entreprise</p>
+                    <p id="pdf-company-email">contact@votre-entreprise.fr</p>
+                </div>
+                <div>
+                    <h3>Client</h3>
+                    <p id="pdf-client-name">Nom du client</p>
+                    <p id="pdf-client-email">client@example.com</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pdf-section">
+            <h3>Projet d'impression 3D: <span id="pdf-project-name"></span></h3>
+            
+            <div style="margin-top: 20px;">
+                <div id="pdf-image-container" style="text-align: center; margin-bottom: 20px;">
+                    <img id="pdf-stl-preview" style="max-width: 100%; max-height: 300px;" />
+                </div>
+                
+                <h4>Détails techniques</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <tr>
+                        <td style="width: 50%; padding: 8px; border-bottom: 1px solid #eee;"><strong>Imprimante utilisée:</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><span id="pdf-printer"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Temps d'impression:</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><span id="pdf-print-time"></span> heures</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Filament utilisé:</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><span id="pdf-filament-weight"></span> grammes</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Temps de main d'œuvre:</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><span id="pdf-labor-time"></span> heures</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="pdf-section">
+            <h3>Tarification</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th style="text-align: left; padding: 12px; border-bottom: 2px solid #eee;">Description</th>
+                        <th style="text-align: right; padding: 12px; border-bottom: 2px solid #eee;">Montant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Coût d'impression (machine)</td>
+                        <td style="text-align: right; padding: 12px; border-bottom: 1px solid #eee;"><span id="pdf-print-cost"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Coût du filament</td>
+                        <td style="text-align: right; padding: 12px; border-bottom: 1px solid #eee;"><span id="pdf-filament-cost"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Coût de main d'œuvre</td>
+                        <td style="text-align: right; padding: 12px; border-bottom: 1px solid #eee;"><span id="pdf-labor-cost"></span></td>
+                    </tr>
+                    <tr style="background-color: #f0f9ff;">
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold;">Prix total TTC</td>
+                        <td style="text-align: right; padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #2563eb;"><span id="pdf-total-cost"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 30px;">
+                <h4>Notes</h4>
+                <p id="pdf-notes" style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">Aucune note additionnelle</p>
+            </div>
+            
+            <div style="margin-top: 40px; text-align: center; font-size: 12px; color: #64748b;">
+                <p>Ce devis est valable 30 jours à partir de la date d'émission.</p>
+                <p>Merci de votre confiance !</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -296,12 +644,15 @@
             // Éléments du DOM
             const calculateBtn = document.getElementById('calculate-btn');
             const generatePdfBtn = document.getElementById('generate-pdf-btn');
+            const newCalculationBtn = document.getElementById('new-calculation-btn');
             const resultsDiv = document.getElementById('results');
-            const pdfPreviewDiv = document.getElementById('pdf-preview');
+            const successAlert = document.getElementById('success-alert');
             
-            // Affichage de l'image téléchargée
+            // Gestion de l'upload d'image
             const stlImageInput = document.getElementById('stl-image');
             const stlPreviewImg = document.getElementById('stl-preview-img');
+            const filePreview = document.getElementById('file-preview');
+            const removeImage = document.getElementById('remove-image');
             
             stlImageInput.addEventListener('change', function(event) {
                 const file = event.target.files[0];
@@ -309,68 +660,210 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         stlPreviewImg.src = e.target.result;
+                        document.getElementById('pdf-stl-preview').src = e.target.result;
+                        filePreview.style.display = 'block';
                     };
                     reader.readAsDataURL(file);
                 }
             });
             
-            // Fonction de calcul du prix
-            calculateBtn.addEventListener('click', function() {
-                // Récupération des valeurs
-                const printer = document.getElementById('printer').value;
-                const printTime = parseFloat(document.getElementById('print-time').value);
-                const filamentWeight = parseFloat(document.getElementById('filament-weight').value);
-                const filamentPrice = parseFloat(document.getElementById('filament-price').value);
-                const laborTime = parseFloat(document.getElementById('labor-time').value);
-                const laborRate = parseFloat(document.getElementById('labor-rate').value);
-                
-                // Validation des entrées
-                if (!printer || isNaN(printTime) || isNaN(filamentWeight) || 
-                    isNaN(filamentPrice) || isNaN(laborTime) || isNaN(laborRate)) {
-                    alert('Veuillez remplir tous les champs requis avec des valeurs valides.');
-                    return;
-                }
-                
-                // Calculs
-                const printerCost = printTime * printerRates[printer];
-                const filamentCost = (filamentWeight / 1000) * filamentPrice;
-                const laborCost = laborTime * laborRate;
-                const totalCost = printerCost + filamentCost + laborCost;
-                
-                // Affichage des résultats
-                document.getElementById('print-cost').textContent = printerCost.toFixed(2) + ' €';
-                document.getElementById('filament-cost').textContent = filamentCost.toFixed(2) + ' €';
-                document.getElementById('labor-cost').textContent = laborCost.toFixed(2) + ' €';
-                document.getElementById('total-cost').textContent = totalCost.toFixed(2) + ' €';
-                
-                // Remplir l'aperçu PDF
-                document.getElementById('pdf-project-name').textContent = document.getElementById('project-name').value || 'Non spécifié';
-                document.getElementById('pdf-client-name').textContent = document.getElementById('client-name').value || 'Non spécifié';
-                document.getElementById('pdf-date').textContent = new Date().toLocaleDateString();
-                document.getElementById('pdf-printer').textContent = printer;
-                document.getElementById('pdf-print-time').textContent = printTime;
-                document.getElementById('pdf-filament-weight').textContent = filamentWeight;
-                document.getElementById('pdf-labor-time').textContent = laborTime;
-                document.getElementById('pdf-print-cost').textContent = printerCost.toFixed(2) + ' €';
-                document.getElementById('pdf-filament-cost').textContent = filamentCost.toFixed(2) + ' €';
-                document.getElementById('pdf-labor-cost').textContent = laborCost.toFixed(2) + ' €';
-                document.getElementById('pdf-total-cost').textContent = totalCost.toFixed(2) + ' €';
-                document.getElementById('pdf-notes').textContent = document.getElementById('project-notes').value || 'Aucune note additionnelle';
-                
-                // Afficher les résultats et bouton PDF
-                resultsDiv.classList.remove('hidden');
-                generatePdfBtn.classList.remove('hidden');
-                pdfPreviewDiv.classList.add('hidden');
+            removeImage.addEventListener('click', function() {
+                stlImageInput.value = '';
+                stlPreviewImg.src = '';
+                document.getElementById('pdf-stl-preview').src = '';
+                filePreview.style.display = 'none';
             });
             
-            // Aperçu du PDF
-            generatePdfBtn.addEventListener('click', function() {
-                pdfPreviewDiv.classList.remove('hidden');
+            // Fonction de calcul du prix
+            calculateBtn.addEventListener('click', function() {
+                // Afficher le loader sur le bouton
+                calculateBtn.innerHTML = '<span class="loading"></span> Calcul en cours...';
+                calculateBtn.disabled = true;
                 
-                // Dans un vrai système, ici on génèrerait un PDF à télécharger
-                alert("Dans un véritable système, cette action générerait un PDF à télécharger. Cet aperçu montre comment le PDF serait structuré.");
-            });
-        });
-    </script>
+                setTimeout(() => {
+                    // Récupération des valeurs
+                    const printer = document.getElementById('printer').value;
+                    const printTime = parseFloat(document.getElementById('print-time').value);
+                    const filamentWeight = parseFloat(document.getElementById('filament-weight').value);
+                    const filamentPrice = parseFloat(document.getElementById('filament-price').value);
+                    const laborTime = parseFloat(document.getElementById('labor-time').value);
+                    const laborRate = parseFloat(document.getElementById('labor-rate').value);
+                    
+                    // Validation des entrées
+                    if (!printer || isNaN(printTime) || isNaN(filamentWeight) || 
+                        isNaN(filamentPrice) || isNaN(laborTime) || isNaN(laborRate)) {
+                        alert('Veuillez remplir tous les champs requis avec des valeurs valides.');
+                        // Restaurer le bouton
+                        calculateBtn.innerHTML = 'Calculer le prix';
+                        calculateBtn.disabled = false;
+                        return;
+                    }
+                    
+                    // Calculs
+                    const printerCost = printTime * printerRates[printer];
+                    const filamentCost = (filamentWeight / 1000) * filamentPrice;
+                    const laborCost = laborTime * laborRate;
+                    const totalCost = printerCost + filamentCost + laborCost;
+                    
+                    // Affichage des résultats
+                    document.getElementById('print-cost').textContent = printerCost.toFixed(2) + ' €';
+                    document.getElementById('filament-cost').textContent = filamentCost.toFixed(2) + ' €';
+                    document.getElementById('labor-cost').textContent = laborCost.toFixed(2) + ' €';
+                    document.getElementById('total-cost').textContent = totalCost.toFixed(2) + ' €';
+                    
+                    // Remplir les données pour le PDF
+                    const today = new Date();
+                    const dateStr = today.toLocaleDateString('fr-FR');
+                    const refNum = 'D-' + today.getFullYear() + (today.getMonth()+1).toString().padStart(2, '0') + 
+                                  today.getDate().toString().padStart(2, '0') + '-' + 
+                                  Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                    
+                    document.getElementById('pdf-date').textContent = dateStr;
+                    document.getElementById('pdf-ref').textContent = refNum;
+document.getElementById('pdf-company-full-name').textContent = document.getElementById('company-name').value || 'Votre Entreprise';
+document.getElementById('pdf-company-name').textContent = document.getElementById('company-name').value || 'Votre Entreprise';
+document.getElementById('pdf-company-email').textContent = document.getElementById('company-email').value || 'contact@votre-entreprise.fr';
+document.getElementById('pdf-client-name').textContent = document.getElementById('client-name').value || 'Client';
+document.getElementById('pdf-client-email').textContent = document.getElementById('client-email').value || '';
+document.getElementById('pdf-project-name').textContent = document.getElementById('project-name').value;
+document.getElementById('pdf-printer').textContent = printer;
+document.getElementById('pdf-print-time').textContent = printTime;
+document.getElementById('pdf-filament-weight').textContent = filamentWeight;
+document.getElementById('pdf-labor-time').textContent = laborTime;
+document.getElementById('pdf-print-cost').textContent = printerCost.toFixed(2) + ' €';
+document.getElementById('pdf-filament-cost').textContent = filamentCost.toFixed(2) + ' €';
+document.getElementById('pdf-labor-cost').textContent = laborCost.toFixed(2) + ' €';
+document.getElementById('pdf-total-cost').textContent = totalCost.toFixed(2) + ' €';
+
+const notes = document.getElementById('project-notes').value;
+document.getElementById('pdf-notes').textContent = notes || 'Aucune note additionnelle';
+
+// Afficher les résultats
+resultsDiv.classList.remove('hidden');
+successAlert.classList.remove('hidden');
+
+// Restaurer le bouton
+calculateBtn.innerHTML = 'Calculer le prix';
+calculateBtn.disabled = false;
+
+// Scroll jusqu'aux résultats
+resultsDiv.scrollIntoView({ behavior: 'smooth' });
+}, 800); // Délai simulé pour l'effet de calcul
+});
+
+// Générer un PDF
+generatePdfBtn.addEventListener('click', function() {
+// Afficher le loader sur le bouton
+generatePdfBtn.innerHTML = '<span class="loading"></span> Génération en cours...';
+generatePdfBtn.disabled = true;
+
+setTimeout(() => {
+    const { jsPDF } = window.jspdf;
+    
+    // Créer un nouveau document PDF
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const pdfTemplate = document.getElementById('pdf-template');
+    
+    // Rendre le template visible temporairement pour la capture
+    pdfTemplate.style.display = 'block';
+    
+    html2canvas(pdfTemplate, {
+        scale: 2, // Meilleure qualité
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        // Cacher à nouveau le template
+        pdfTemplate.style.display = 'none';
+        
+        // Ajouter l'image du canvas au PDF
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 297; // A4 height in mm
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+        
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        
+        // En cas de plusieurs pages
+        while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            doc.addPage();
+            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+        
+        // Nom du projet pour le fichier
+        const projectName = document.getElementById('project-name').value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const fileName = `devis_impression_3d_${projectName}.pdf`;
+        
+        // Télécharger le PDF
+        doc.save(fileName);
+        
+        // Restaurer le bouton
+        generatePdfBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Télécharger le devis PDF';
+        generatePdfBtn.disabled = false;
+    });
+}, 1000); // Délai simulé pour l'effet de génération
+});
+
+// Nouveau calcul
+newCalculationBtn.addEventListener('click', function() {
+// Réinitialiser le formulaire
+document.getElementById('pricing-form').reset();
+document.getElementById('file-preview').style.display = 'none';
+
+// Cacher les résultats
+resultsDiv.classList.add('hidden');
+successAlert.classList.add('hidden');
+
+// Scroller vers le haut
+window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Gestion du drag & drop pour l'image
+const dropZone = document.querySelector('.file-input-container');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+dropZone.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+e.preventDefault();
+e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+dropZone.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+dropZone.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight() {
+dropZone.style.borderColor = 'var(--primary-color)';
+dropZone.style.backgroundColor = '#eff6ff';
+}
+
+function unhighlight() {
+dropZone.style.borderColor = 'var(--border-color)';
+dropZone.style.backgroundColor = '#f8fafc';
+}
+
+dropZone.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+const dt = e.dataTransfer;
+const files = dt.files;
+stlImageInput.files = files;
+
+// Déclencher manuellement l'événement change
+const event = new Event('change', { bubbles: true });
+stlImageInput.dispatchEvent(event);
+}
+});
+</script>
 </body>
 </html>
